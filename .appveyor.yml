@@ -2,9 +2,9 @@ image: Ubuntu
 
 stack: jdk 11
 
-branches:
-  only:
-    - main
+#branches:
+#  only:
+#    - main
 
 build: off
 
