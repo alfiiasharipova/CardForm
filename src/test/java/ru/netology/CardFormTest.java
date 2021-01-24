@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.*;
 
 public class CardFormTest {
 
@@ -24,12 +24,16 @@ public class CardFormTest {
 
     @Test
     void shouldSubmitRequest() {
-        $("[data-test-id=city] input").setValue("Казань");
-        SelenideElement date = $("[data-test-id=date] input");
-        date.sendKeys(Keys.CONTROL, "A");
-        date.sendKeys(Keys.DELETE);
-        String newDate = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("ddMMyyyy"));
-        date.setValue(newDate);
+        $("[data-test-id=city] input").setValue("Ка");
+        $(byText("Казань")).click();
+        $("[data-test-id=date] input").click();
+        SelenideElement frame = $(".calendar-input__calendar-wrapper ~ iframe");
+        LocalDate deliveryDate = LocalDate.now().plusDays(3);
+        LocalDate newDate = deliveryDate.plusDays(4);
+        if (deliveryDate.getMonth() != newDate.getMonth())
+            $("[data-step='1']").click();
+        int day = newDate.getDayOfMonth();
+        $$(".calendar__day").get(day - 1).click();
         $("[name=name]").setValue("Кашин Василий");
         $("[name=phone]").setValue("+79270000000");
         $(".checkbox__box").click();
